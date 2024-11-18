@@ -7,11 +7,12 @@ camera_matrix = np.load("camera_matrix.npy")
 dist_coeffs = np.load("dist_coeffs.npy")
 
 # Define the ArUco dictionary
-aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50)
-parameters = aruco.DetectorParameters_create()
+aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
+
+parameters = aruco.DetectorParameters()
 
 # Define the real-world size of the marker (in meters)
-marker_size = 0.05  # 5 cm
+marker_size = 0.0254  # 5 cm
 
 def calculate_distance_3d(tvec1, tvec2):
     # Calculate the Euclidean distance between two points in 3D space (tvec1 and tvec2)
@@ -19,7 +20,7 @@ def calculate_distance_3d(tvec1, tvec2):
     return distance
 
 # Open the default webcam (index 0)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
     # Capture frame-by-frame
@@ -42,11 +43,6 @@ while True:
         # Estimate pose of each marker (rotation and translation vectors)
         rvecs, tvecs, _ = aruco.estimatePoseSingleMarkers(corners, marker_size, camera_matrix, dist_coeffs)
 
-        # Draw axis for each detected marker and print their coordinates
-        for i in range(len(ids)):
-            aruco.drawAxis(frame, camera_matrix, dist_coeffs, rvecs[i], tvecs[i], 0.05)
-            tvec = tvecs[i][0]  # Translation vector (x, y, z) of the marker
-            print(f"Marker {ids[i][0]}: x={tvec[0]:.2f}, y={tvec[1]:.2f}, z={tvec[2]:.2f}")
 
         # If two or more markers are detected, calculate the 3D distance
         if len(ids) > 1:
