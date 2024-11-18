@@ -19,7 +19,7 @@ def calculate_distance_3d(tvec1, tvec2):
     distance = np.linalg.norm(tvec1 - tvec2)
     return distance
 
-# Open the default webcam (index 0)
+# Open the default webcam (index 1)
 cap = cv2.VideoCapture(1)
 
 while True:
@@ -43,17 +43,26 @@ while True:
         # Estimate pose of each marker (rotation and translation vectors)
         rvecs, tvecs, _ = aruco.estimatePoseSingleMarkers(corners, marker_size, camera_matrix, dist_coeffs)
 
-
+        for i, id_ in enumerate(ids):
+            tvec = tvecs[i][0]  # Translation vector of the marker
+            
+            # Display the marker ID and its coordinates on the frame
+            x, y, z = tvec
+            cv2.putText(frame, f"ID {id_[0]}: ({x:.2f}, {y:.2f}, {z:.2f})", 
+                        (int(corners[i][0][0][0]), int(corners[i][0][0][1]) - 10), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            
         # If two or more markers are detected, calculate the 3D distance
         if len(ids) > 1:
-            tvec1 = tvecs[0][0]  # 3D position of first marker
-            tvec2 = tvecs[1][0]  # 3D position of second marker
+            tvec1 = tvecs[0][0]  # 3D position of the first marker
+            tvec2 = tvecs[1][0]  # 3D position of the second marker
 
             # Calculate the distance between the two markers
             distance = calculate_distance_3d(tvec1, tvec2)
             
             # Display the distance on the frame
-            cv2.putText(frame, f"Distance: {distance:.2f} meters", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(frame, f"Distance: {distance:.2f} meters", (50, 50), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
             # Print coordinates of both markers and their distance
             print(f"Marker 1 (x, y, z): {tvec1}")
