@@ -1,5 +1,8 @@
 import numpy as np
 
+bottom_left = (-172.926, -2.181, 0.246)
+top_right = (170.414,1.896,-9.994)
+bottom_right = (-174.758, -2.061, -0.062)
 def map_aruco_to_robot(known_aruco_coords, known_robot_coords, unknown_aruco_coords):
     # Convert to numpy arrays
     known_aruco_coords = np.array(known_aruco_coords)
@@ -33,9 +36,9 @@ def map_aruco_to_robot(known_aruco_coords, known_robot_coords, unknown_aruco_coo
     return transformed_coords
 
 # Example usage
-known_aruco_coords = [(0.0659, -0.8011569, 0.40923399), (179.663, 0.354, -18.672)]
-known_robot_coords = [(176, 1.173, 6.586), (-0.07100712, 0.05110727, 0.4118742)]
-unknown_aruco_coords = [(0.01684819, -0.11066424, 0.40709929)]
+known_aruco_coords = [(0.06, -0.06, 0.4), (-0.08, 0.08, 0.4),(-0.08,0.06,0.4)]
+known_robot_coords = [(-172.926, -2.181, 0.246), (170.414,1.896,-9.994), (-174.758, -2.061, -0.062)]
+unknown_aruco_coords = [(0.04, -0.06, 0.4)]
 
 robot_coords = map_aruco_to_robot(known_aruco_coords, known_robot_coords, unknown_aruco_coords)
 print("Transformed Robot Coordinates:", robot_coords)
