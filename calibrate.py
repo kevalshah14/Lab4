@@ -14,7 +14,7 @@ objpoints = []  # 3D points in real-world space
 imgpoints = []  # 2D points in image plane
 
 # Initialize webcam
-cap = cv2.VideoCapture(1)  # Change to 0 if using the default webcam
+cap = cv2.VideoCapture(0)  # Change to 0 if using the default webcam
 
 if not cap.isOpened():
     print("Error: Unable to access the webcam.")
